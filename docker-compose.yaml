@@ -1,0 +1,52 @@
+services:
+  mongo:
+    image: mongo:5
+    container_name: mongo
+    ports:
+      - "${MONGO_PORT}:${MONGO_PORT}"
+    volumes:
+      - mongo-data:/data/db
+
+  products-service:
+    build:
+      context: ./products-service
+    ports:
+      - "${PRODUCTS_SERVICE_PORT}:${PRODUCTS_SERVICE_PORT}"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    depends_on:
+      - mongo
+
+  cart-service:
+    build:
+      context: ./cart-service
+    ports:
+      - "${CART_SERVICE_PORT}:${CART_SERVICE_PORT}"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    depends_on:
+      - mongo
+
+  checkout-service:
+    build:
+      context: ./checkout-service
+    ports:
+      - "${CHECKOUT_SERVICE_PORT}:${CHECKOUT_SERVICE_PORT}"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    environment:
+      - REACT_APP_PRODUCTS_URL=${REACT_APP_PRODUCTS_URL}
+      - REACT_APP_CART_URL=${REACT_APP_CART_URL}
+      - REACT_APP_CHECKOUT_URL=${REACT_APP_CHECKOUT_URL}
+
+volumes:
+  mongo-data:
+

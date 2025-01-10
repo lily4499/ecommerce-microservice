@@ -1,0 +1,29 @@
+docker-compose down
+docker-compose up --build
+
+
+docker exec -it mongo mongosh --eval '
+use ecommerce;
+
+db.products.insertMany([
+    { name: "Laptop", price: 800, description: "High-performance laptop for productivity and gaming." },
+    { name: "Smartphone", price: 600, description: "Latest model smartphone with cutting-edge features." },
+    { name: "Smartwatch", price: 250, description: "Wearable device with health tracking and notifications." },
+    { name: "Wireless Earbuds", price: 150, description: "Noise-cancelling earbuds with great sound quality." },
+    { name: "4K Monitor", price: 400, description: "Ultra HD monitor for crisp and clear visuals." },
+    { name: "Gaming Keyboard", price: 100, description: "Mechanical keyboard designed for gaming." },
+    { name: "External SSD", price: 200, description: "High-speed external SSD for storage and backup." },
+    { name: "Graphics Card", price: 500, description: "Powerful GPU for gaming and video editing." },
+    { name: "Drone", price: 1000, description: "High-tech drone with 4K camera and GPS." },
+    { name: "VR Headset", price: 350, description: "Virtual reality headset for immersive experiences." }
+]);
+
+db.cart.insertOne({ items: [] });
+
+db.orders.insertOne({ items: [] });
+
+
+docker exec -it mongo mongosh
+use ecommerce
+db.products.find()
+
